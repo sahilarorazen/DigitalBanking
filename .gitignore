@@ -1,0 +1,19 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio user files
+.vs/
+*.user
+*.suo
+
+# Test results
+TestResults/
+
+# Local environment and secrets
+.env
+*.local.json
+
+# OS files
+.DS_Store
+Thumbs.db
