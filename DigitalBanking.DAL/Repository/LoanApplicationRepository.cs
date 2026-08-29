@@ -8,11 +8,11 @@ namespace DigitalBanking.DAL.Repository;
 public class LoanApplicationRepository(DigitalBankingDbContext _digitalBankingDbContext) : ILoanApplicationRepository
 {
     public async Task<LoanApplication> CreateAsync(
-        LoanApplication loanApplication)
+        LoanApplication loanApplication, CancellationToken cancellationToken)
     {
         _digitalBankingDbContext.LoanApplications.Add(loanApplication);
 
-        await _digitalBankingDbContext.SaveChangesAsync();
+        await _digitalBankingDbContext.SaveChangesAsync(cancellationToken);
 
         return loanApplication;
     }

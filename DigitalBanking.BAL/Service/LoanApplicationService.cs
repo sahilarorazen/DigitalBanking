@@ -9,21 +9,21 @@ public class LoanApplicationService(ILoanApplicationRepository _loanApplicationR
 {    
     public async Task<CreateLoanApplicationResponse>
         CreateLoanApplicationAsync(
-        CreateLoanApplicationRequest createLoanApplicationRequest)
+        CreateLoanApplicationRequest request, CancellationToken cancellationToken)
     {
-        var entity = new LoanApplication
+        var entityLoanApplication = new LoanApplication
         {
-            LoanAmount = createLoanApplicationRequest.LoanAmount,
-            Tenure = createLoanApplicationRequest.Tenure,
-            InterestRate = createLoanApplicationRequest.InterestRate,
-            MonthlyIncome = createLoanApplicationRequest.MonthlyIncome,
-            ExistingLiabilities = createLoanApplicationRequest.ExistingLiabilities,
-            EmploymentType = createLoanApplicationRequest.EmploymentType,
+            LoanAmount = request.LoanAmount,
+            Tenure = request.Tenure,
+            InterestRate = request.InterestRate,
+            MonthlyIncome = request.MonthlyIncome,
+            ExistingLiabilities = request.ExistingLiabilities,
+            EmploymentType = request.EmploymentType,
             Status = "Submitted",
             CreatedDate = DateTime.UtcNow
         };
 
-        var result = await _loanApplicationRepository.CreateAsync(entity);
+        var result = await _loanApplicationRepository.CreateAsync(entityLoanApplication, cancellationToken);
 
         return new CreateLoanApplicationResponse
         {

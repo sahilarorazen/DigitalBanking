@@ -5,5 +5,5 @@ namespace DigitalBanking.DAL.Interface;
 
 public interface ILoanApplicationRepository
 {
-    Task<LoanApplication> CreateAsync(LoanApplication loanApplication);
+    Task<LoanApplication> CreateAsync(LoanApplication loanApplication, CancellationToken cancellationToken);
 }

@@ -10,11 +10,9 @@ public class LoanApplicationController(ILoanApplicationService _loanApplicationS
 {
     [HttpPost]
     public async Task<IActionResult> CreateLoanApplication(
-        CreateLoanApplicationRequest createLoanApplicationRequest)
+        CreateLoanApplicationRequest request, CancellationToken cancellationToken)
     {
-        var response =
-            await _loanApplicationService.CreateLoanApplicationAsync(createLoanApplicationRequest);
-
+        var response = await _loanApplicationService.CreateLoanApplicationAsync(request, cancellationToken);
         return Ok(response);
     }
 
