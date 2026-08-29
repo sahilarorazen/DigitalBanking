@@ -21,5 +21,12 @@ public class LoanApplicationController(ILoanApplicationService _loanApplicationS
     {
         return Ok("Working");
     }
+
+    [HttpGet("health")]
+    public async Task<IActionResult> Health()
+    {
+        await _loanApplicationService.HealthAsync(CancellationToken.None);
+        return Ok("Database Connected");
+    }
 }
 

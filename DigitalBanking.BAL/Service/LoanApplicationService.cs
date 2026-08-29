@@ -32,4 +32,9 @@ public class LoanApplicationService(ILoanApplicationRepository _loanApplicationR
             CreatedDate = result.CreatedDate
         };
     }
+
+    public async Task HealthAsync(CancellationToken cancellationToken)
+    {
+        await _loanApplicationRepository.HealthAsync(cancellationToken);
+    }
 }

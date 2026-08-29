@@ -17,38 +17,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-// builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
-//     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<DigitalBankingDbContext>((sp, options) =>
-{
-    var configuration = sp.GetRequiredService<IConfiguration>();
-
-    var connectionString =
-        configuration.GetConnectionString("DefaultConnection");
-
-    var clientId =
-        configuration["ManagedIdentity:ClientId"];
-
-    var credential = new DefaultAzureCredential(
-        new DefaultAzureCredentialOptions
-        {
-            ManagedIdentityClientId = clientId
-        });
-
-    var connection = new SqlConnection(connectionString);
-
-    var token =
-        credential.GetToken(
-            new Azure.Core.TokenRequestContext(
-                new[]
-                {
-                    "https://database.windows.net/.default"
-                }));
-
-    connection.AccessToken = token.Token;
-
-    options.UseSqlServer(connection);
-});
+builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
