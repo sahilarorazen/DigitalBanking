@@ -22,8 +22,12 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        docker build -t digitalbankingacrdev.azurecr.io/digitalbanking-api:latest .
+        docker build -t digitalbankingacrdev.azurecr.io/digitalbanking-api:latest -t digitalbankingacrdev.azurecr.io/digitalbanking-api:${{ github.sha }} .
 
-    - name: Push Docker Image
+    - name: Push Docker Image (latest)
       run: |
         docker push digitalbankingacrdev.azurecr.io/digitalbanking-api:latest
+    
+    - name: Push Docker Image (commit)
+      run: |
+        docker push digitalbankingacrdev.azurecr.io/digitalbanking-api:${{ github.sha }}
