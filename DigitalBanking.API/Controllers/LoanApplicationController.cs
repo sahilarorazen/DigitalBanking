@@ -19,7 +19,7 @@ public class LoanApplicationController(ILoanApplicationService _loanApplicationS
     [HttpGet("test")]
     public IActionResult Test()
     {
-        return Ok("Working");
+        return Ok("Working Now");
     }
 
     [HttpGet("health")]
