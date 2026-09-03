@@ -26,7 +26,7 @@ public class LoanApplicationController(ILoanApplicationService _loanApplicationS
     public async Task<IActionResult> Health()
     {
         await _loanApplicationService.HealthAsync(CancellationToken.None);
-        return Ok("Database Connected");
+        return Ok("Database Connection established successfully.");
     }
 }
 
