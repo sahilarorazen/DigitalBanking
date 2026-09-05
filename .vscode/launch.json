@@ -11,6 +11,12 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/DigitalBanking.API/DigitalBanking.API.csproj"
+        },
+        {
+            "name": "Attach to .NET Functions",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:azureFunctions.pickProcess}"
         }
     ]
 }

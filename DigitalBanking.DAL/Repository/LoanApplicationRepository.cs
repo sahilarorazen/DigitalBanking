@@ -17,8 +17,25 @@ public class LoanApplicationRepository(DigitalBankingDbContext _digitalBankingDb
         return loanApplication;
     }
 
-    public async Task HealthAsync(CancellationToken cancellationToken)
+    public async Task<LoanApplication> UpdateAsync(
+        LoanApplication loanApplication, CancellationToken cancellationToken)
     {
-        await _digitalBankingDbContext.Database.ExecuteSqlRawAsync("SELECT 1", cancellationToken);  
+        _digitalBankingDbContext.LoanApplications.Update(loanApplication);
+
+        await _digitalBankingDbContext.SaveChangesAsync(cancellationToken);
+
+        return loanApplication;
+    }
+
+    public async Task<LoanApplication?> GetByIdAsync(
+        int loanApplicationId,
+        CancellationToken cancellationToken)
+    {
+        return await _digitalBankingDbContext
+            .LoanApplications
+            .FirstOrDefaultAsync(
+                x => x.Id == loanApplicationId,
+                cancellationToken);
     }
 }
+

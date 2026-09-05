@@ -1,25 +1,22 @@
-using DigitalBanking.API;
-using DigitalBanking.BAL.Interface;
-using DigitalBanking.BAL.Service;
+using Azure.Monitor.OpenTelemetry.Exporter;
 using DigitalBanking.DAL.Data;
 using DigitalBanking.DAL.Interface;
 using DigitalBanking.DAL.Repository;
+using DigitalBanking.BAL.Interface;
+using DigitalBanking.BAL.Service;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.Azure.Functions.Worker.OpenTelemetry;
 using Microsoft.EntityFrameworkCore;
-using DigitalBanking.API.Services;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System.Text.Json;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using OpenTelemetry;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = FunctionsApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddOpenApi();
-builder.Services.AddProblemDetails();
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddHealthChecks();
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAssessmentResultPublisherService, AssessmentResultPublisherService>();
@@ -31,21 +28,13 @@ builder.Services.AddScoped<IServiceBusPublisherService,ServiceBusPublisherServic
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ILoanApplicationRepository, LoanApplicationRepository>();
+builder.ConfigureFunctionsWebApplication();
 
-var app = builder.Build();
-
-app.UseExceptionHandler();
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING")))
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Digital Banking API v1");
-});
-
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
+    builder.Services.AddOpenTelemetry()
+        .UseFunctionsWorkerDefaults()
+        .UseAzureMonitorExporter();
 }
 
-app.UseHttpsRedirection();
-app.MapControllers();
-app.Run();
+builder.Build().Run();
