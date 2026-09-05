@@ -1,0 +1,33 @@
+name: Build and Push to ACR
+
+on:
+  push:
+    branches:
+      - Sahil
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
+    
+    - name: Login to ACR
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ secrets.ACR_LOGIN_SERVER }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    - name: Build Docker Image
+      run: |
+        docker build -t digitalbankingacrdev.azurecr.io/digitalbanking-api:latest -t digitalbankingacrdev.azurecr.io/digitalbanking-api:${{ github.sha }} .
+
+    - name: Push Docker Image (latest)
+      run: |
+        docker push digitalbankingacrdev.azurecr.io/digitalbanking-api:latest
+    
+    - name: Push Docker Image (commit)
+      run: |
+        docker push digitalbankingacrdev.azurecr.io/digitalbanking-api:${{ github.sha }}

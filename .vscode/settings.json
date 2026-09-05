@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "",
+    "appService.deploySubpath": "DigitalBanking.API/bin/Release/net9.0/publish"
+}
