@@ -16,9 +16,4 @@ public class LoanApplicationRepository(DigitalBankingDbContext _digitalBankingDb
 
         return loanApplication;
     }
-
-    public async Task HealthAsync(CancellationToken cancellationToken)
-    {
-        await _digitalBankingDbContext.Database.ExecuteSqlRawAsync("SELECT 1", cancellationToken);  
-    }
 }

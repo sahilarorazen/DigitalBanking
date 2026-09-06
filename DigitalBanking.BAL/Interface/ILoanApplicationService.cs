@@ -6,6 +6,4 @@ public interface ILoanApplicationService
 {
     Task<CreateLoanApplicationResponse> CreateLoanApplicationAsync(
         CreateLoanApplicationRequest request, CancellationToken cancellationToken);
-    
-    Task HealthAsync(CancellationToken cancellationToken);
 }

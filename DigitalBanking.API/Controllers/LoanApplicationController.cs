@@ -15,18 +15,5 @@ public class LoanApplicationController(ILoanApplicationService _loanApplicationS
         var response = await _loanApplicationService.CreateLoanApplicationAsync(request, cancellationToken);
         return Ok(response);
     }
-
-    [HttpGet("test")]
-    public IActionResult Test()
-    {
-        return Ok("Working");
-    }
-
-    [HttpGet("health")]
-    public async Task<IActionResult> Health()
-    {
-        await _loanApplicationService.HealthAsync(CancellationToken.None);
-        return Ok("Database Connection established successfully.");
-    }
 }
 

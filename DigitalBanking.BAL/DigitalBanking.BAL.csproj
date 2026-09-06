@@ -3,7 +3,13 @@
   <ItemGroup>
     <ProjectReference Include="..\DigitalBanking.DAL\DigitalBanking.DAL.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+  
+  <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.29.2" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
