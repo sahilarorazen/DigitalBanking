@@ -3,7 +3,7 @@ name: Build and Push to ACR
 on:
   push:
     branches:
-      - Sahil
+      - sahil-functions
 
 jobs:
   build:
