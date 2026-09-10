@@ -17,25 +17,18 @@ public class LoanApplicationRepository(DigitalBankingDbContext _digitalBankingDb
         return loanApplication;
     }
 
-    public async Task<LoanApplication> UpdateAsync(
-        LoanApplication loanApplication, CancellationToken cancellationToken)
+    public async Task<IEnumerable<LoanApplication>> GetAllAsync()
     {
-        _digitalBankingDbContext.LoanApplications.Update(loanApplication);
-
-        await _digitalBankingDbContext.SaveChangesAsync(cancellationToken);
-
-        return loanApplication;
+        return await _digitalBankingDbContext.LoanApplications
+            .AsNoTracking()
+            .ToListAsync();
     }
 
-    public async Task<LoanApplication?> GetByIdAsync(
-        int loanApplicationId,
-        CancellationToken cancellationToken)
+    public async Task<LoanApplication?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return await _digitalBankingDbContext
-            .LoanApplications
-            .FirstOrDefaultAsync(
-                x => x.Id == loanApplicationId,
-                cancellationToken);
+        return await _digitalBankingDbContext.LoanApplications
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 }
 

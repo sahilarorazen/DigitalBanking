@@ -3,6 +3,7 @@ namespace DigitalBanking.DAL.Entities;
 public class LoanApplication
 {
     public int Id { get; set; }
+    public int CustomerId { get; set; }
     public decimal LoanAmount { get; set; }
     public int Tenure { get; set; }
     public decimal InterestRate { get; set; }

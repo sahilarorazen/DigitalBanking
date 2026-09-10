@@ -4,6 +4,9 @@ namespace DigitalBanking.BAL.DTO;
 public class CreateLoanApplicationRequest
 {
     [Required]
+    public int CustomerId { get; set; }
+
+    [Required]
     public decimal LoanAmount { get; set; }
 
     [Required]

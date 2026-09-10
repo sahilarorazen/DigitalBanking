@@ -16,6 +16,7 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
     {
         var entityLoanApplication = new LoanApplication
         {
+            CustomerId = request.CustomerId,
             LoanAmount = request.LoanAmount,
             Tenure = request.Tenure,
             InterestRate = request.InterestRate,
@@ -32,7 +33,7 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
             new LoanAssessmentMessage
             {
                 LoanApplicationId = result.Id,
-                CustomerId = "",
+                CustomerId = result.CustomerId.ToString(),
                 LoanAmount = result.LoanAmount,
                 SubmittedDate = DateTime.UtcNow
             };
@@ -120,13 +121,13 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
         loanApplication.Decision = decision;
         loanApplication.AssessmentCompletedDate = DateTime.UtcNow;
 
-        await _loanApplicationRepository.UpdateAsync(loanApplication, cancellationToken); 
+        await _loanApplicationRepository.CreateAsync(loanApplication, cancellationToken); 
 
         var resultMessage =
         new LoanAssessmentResultMessage
         {
             LoanApplicationId = loanApplication.Id,
-            CustomerId = message.CustomerId,
+            CustomerId = loanApplication.CustomerId.ToString(),
             LoanAmount = loanApplication.LoanAmount,
             RiskScore = riskScore,
             Decision = decision,
@@ -136,7 +137,40 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
         await _assessmentResultPublisher.PublishAsync(
             resultMessage,
             cancellationToken);           
-            }
+    }
+
+    public async Task<IEnumerable<LoanApplicationReadDto>> GetAllAsync()
+    {
+        var loans = await _loanApplicationRepository.GetAllAsync();
+
+        return loans.Select(x => new LoanApplicationReadDto
+        {
+            Id = x.Id,
+            CustomerId = x.CustomerId,
+            LoanAmount = x.LoanAmount,
+            LoanTermMonths = x.Tenure,
+            Status = x.Status,
+            CreatedDate = x.CreatedDate
+        });
+    }
+
+    public async Task<LoanApplicationReadDto?> GetByIdAsync(int id)
+    {
+        var loan = await _loanApplicationRepository.GetByIdAsync(id, CancellationToken.None);
+
+        if (loan == null)
+            return null;
+
+        return new LoanApplicationReadDto
+        {
+            Id = loan.Id,
+            CustomerId = loan.CustomerId,
+            LoanAmount = loan.LoanAmount,
+            LoanTermMonths = loan.Tenure,
+            Status = loan.Status,
+            CreatedDate = loan.CreatedDate
+        };
+    }
 }
 
 

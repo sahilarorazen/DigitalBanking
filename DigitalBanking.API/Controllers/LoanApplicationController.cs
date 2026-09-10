@@ -16,10 +16,25 @@ public class LoanApplicationsController(ILoanApplicationService _loanApplication
         return Ok(response);
     }
 
-    [HttpGet("test")]
-    public IActionResult Test()
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
     {
-        return Ok("Working");
+        var result =
+            await _loanApplicationService.GetAllAsync();
+
+        return Ok(result);
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var result =
+            await _loanApplicationService.GetByIdAsync(id);
+
+        if (result == null)
+            return NotFound();
+
+        return Ok(result);
     }
 }
 

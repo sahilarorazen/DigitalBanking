@@ -22,6 +22,7 @@ public class ServiceBusPublisherService : IServiceBusPublisherService
             configuration["ManagedIdentityClientId"];
 
         var credential =
+            // new AzureCliCredential();
             new DefaultAzureCredential(
                 new DefaultAzureCredentialOptions
                 {
