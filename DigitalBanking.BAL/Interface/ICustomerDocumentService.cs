@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace DigitalBanking.API.Services;
+namespace DigitalBanking.BAL.Interface;
 
 public interface ICustomerDocumentService
 {

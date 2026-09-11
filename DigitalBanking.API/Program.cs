@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Azure.Identity;
 using Azure.Core;
 using Microsoft.Data.SqlClient;
+using DigitalBanking.BAL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +48,7 @@ builder.Services.AddScoped<IAssessmentResultPublisherService, AssessmentResultPu
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ILoanApplicationService, LoanApplicationService>();
 builder.Services.AddScoped<IServiceBusPublisherService,ServiceBusPublisherService>();
-// builder.Services.AddSingleton<ICustomerDocumentService, AzureBlobCustomerDocumentService>();
+builder.Services.AddSingleton<ICustomerDocumentService, CustomerDocumentService>();
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();

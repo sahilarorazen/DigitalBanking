@@ -2,14 +2,17 @@ using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Identity;
+using Microsoft.Extensions.Configuration;
+using DigitalBanking.BAL.Interface;
+using Microsoft.AspNetCore.Http;
 
-namespace DigitalBanking.API.Services;
+namespace DigitalBanking.BAL.Services;
 
-public sealed class AzureBlobCustomerDocumentService : ICustomerDocumentService
+public sealed class CustomerDocumentService : ICustomerDocumentService
 {
     private readonly BlobContainerClient containerClient;
 
-    public AzureBlobCustomerDocumentService(IConfiguration configuration)
+    public CustomerDocumentService(IConfiguration configuration)
     {
         var accountName =
         configuration["BlobStorage:AccountName"]
