@@ -26,7 +26,11 @@ builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
     var connection = new SqlConnection(connectionString);
 
     // var credential = new AzureCliCredential();
-    var credential = new DefaultAzureCredential();
+    var credential = new DefaultAzureCredential(
+                new DefaultAzureCredentialOptions
+                {
+                    ManagedIdentityClientId = builder.Configuration["ManagedIdentityClientId"]
+                });
 
     var token = credential.GetToken(
         new TokenRequestContext(
