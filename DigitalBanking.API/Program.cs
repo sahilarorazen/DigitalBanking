@@ -26,12 +26,12 @@ builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
 
     var connection = new SqlConnection(connectionString);
 
-    // var credential = new AzureCliCredential();
-    var credential = new DefaultAzureCredential(
-                new DefaultAzureCredentialOptions
-                {
-                    ManagedIdentityClientId = builder.Configuration["ManagedIdentityClientId"]
-                });
+    var credential = new AzureCliCredential();
+    // var credential = new DefaultAzureCredential(
+    //             new DefaultAzureCredentialOptions
+    //             {
+    //                 ManagedIdentityClientId = builder.Configuration["ManagedIdentityClientId"]
+    //             });
 
     var token = credential.GetToken(
         new TokenRequestContext(
@@ -49,7 +49,9 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ILoanApplicationService, LoanApplicationService>();
 builder.Services.AddScoped<IServiceBusPublisherService,ServiceBusPublisherService>();
 builder.Services.AddSingleton<ICustomerDocumentService, CustomerDocumentService>();
+builder.Services.AddScoped<ILoanProductService,LoanProductService>();
 
+builder.Services.AddScoped<ILoanProductRepository,LoanProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ILoanApplicationRepository, LoanApplicationRepository>();

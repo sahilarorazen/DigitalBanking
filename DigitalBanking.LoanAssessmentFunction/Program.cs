@@ -23,7 +23,6 @@ builder.Services.AddScoped<IAssessmentResultPublisherService, AssessmentResultPu
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ILoanApplicationService, LoanApplicationService>();
 builder.Services.AddScoped<IServiceBusPublisherService,ServiceBusPublisherService>();
-// builder.Services.AddSingleton<ICustomerDocumentService, AzureBlobCustomerDocumentService>();
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();

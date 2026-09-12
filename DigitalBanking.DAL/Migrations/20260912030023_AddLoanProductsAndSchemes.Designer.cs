@@ -4,6 +4,7 @@ using DigitalBanking.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DigitalBanking.DAL.Migrations
 {
     [DbContext(typeof(DigitalBankingDbContext))]
-    partial class DigitalBankingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260912030023_AddLoanProductsAndSchemes")]
+    partial class AddLoanProductsAndSchemes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,36 +187,6 @@ namespace DigitalBanking.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LoanProducts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsActive = true,
-                            ProductCode = "PL",
-                            ProductName = "Personal Loan"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsActive = true,
-                            ProductCode = "HL",
-                            ProductName = "Home Loan"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsActive = true,
-                            ProductCode = "VL",
-                            ProductName = "Vehicle Loan"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsActive = true,
-                            ProductCode = "BL",
-                            ProductName = "Business Loan"
-                        });
                 });
 
             modelBuilder.Entity("DigitalBanking.DAL.Entities.LoanScheme", b =>
@@ -246,152 +219,6 @@ namespace DigitalBanking.DAL.Migrations
                     b.HasIndex("LoanProductId");
 
                     b.ToTable("LoanSchemes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            InterestRate = 10.50m,
-                            IsActive = true,
-                            LoanProductId = 1,
-                            SchemeCode = "PL-SAL",
-                            SchemeName = "Salaried Personal Loan"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            InterestRate = 11.00m,
-                            IsActive = true,
-                            LoanProductId = 1,
-                            SchemeCode = "PL-SELF",
-                            SchemeName = "Self Employed Personal Loan"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            InterestRate = 10.25m,
-                            IsActive = true,
-                            LoanProductId = 1,
-                            SchemeCode = "PL-MED",
-                            SchemeName = "Medical Personal Loan"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            InterestRate = 11.50m,
-                            IsActive = true,
-                            LoanProductId = 1,
-                            SchemeCode = "PL-TRV",
-                            SchemeName = "Travel Personal Loan"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            InterestRate = 8.50m,
-                            IsActive = true,
-                            LoanProductId = 2,
-                            SchemeCode = "HL-PUR",
-                            SchemeName = "Home Purchase Loan"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            InterestRate = 8.25m,
-                            IsActive = true,
-                            LoanProductId = 2,
-                            SchemeCode = "HL-CON",
-                            SchemeName = "Home Construction Loan"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            InterestRate = 8.75m,
-                            IsActive = true,
-                            LoanProductId = 2,
-                            SchemeCode = "HL-REN",
-                            SchemeName = "Home Renovation Loan"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            InterestRate = 8.00m,
-                            IsActive = true,
-                            LoanProductId = 2,
-                            SchemeCode = "HL-BT",
-                            SchemeName = "Home Balance Transfer"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            InterestRate = 9.00m,
-                            IsActive = true,
-                            LoanProductId = 3,
-                            SchemeCode = "VL-NCAR",
-                            SchemeName = "New Car Loan"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            InterestRate = 10.50m,
-                            IsActive = true,
-                            LoanProductId = 3,
-                            SchemeCode = "VL-UCAR",
-                            SchemeName = "Used Car Loan"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            InterestRate = 10.25m,
-                            IsActive = true,
-                            LoanProductId = 3,
-                            SchemeCode = "VL-BIKE",
-                            SchemeName = "Two Wheeler Loan"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            InterestRate = 8.90m,
-                            IsActive = true,
-                            LoanProductId = 3,
-                            SchemeCode = "VL-EV",
-                            SchemeName = "Electric Vehicle Loan"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            InterestRate = 12.00m,
-                            IsActive = true,
-                            LoanProductId = 4,
-                            SchemeCode = "BL-WC",
-                            SchemeName = "Working Capital Loan"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            InterestRate = 11.50m,
-                            IsActive = true,
-                            LoanProductId = 4,
-                            SchemeCode = "BL-MSME",
-                            SchemeName = "MSME Business Loan"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            InterestRate = 12.25m,
-                            IsActive = true,
-                            LoanProductId = 4,
-                            SchemeCode = "BL-EQP",
-                            SchemeName = "Equipment Finance Loan"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            InterestRate = 13.00m,
-                            IsActive = true,
-                            LoanProductId = 4,
-                            SchemeCode = "BL-STR",
-                            SchemeName = "Startup Business Loan"
-                        });
                 });
 
             modelBuilder.Entity("DigitalBanking.DAL.Entities.LoanScheme", b =>
