@@ -19,6 +19,12 @@ builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 // builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration =
+        builder.Configuration["Redis:ConnectionString"];
+});
+
 builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
 {
     var connectionString =
@@ -50,6 +56,7 @@ builder.Services.AddScoped<ILoanApplicationService, LoanApplicationService>();
 builder.Services.AddScoped<IServiceBusPublisherService,ServiceBusPublisherService>();
 builder.Services.AddSingleton<ICustomerDocumentService, CustomerDocumentService>();
 builder.Services.AddScoped<ILoanProductService,LoanProductService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
 
 builder.Services.AddScoped<ILoanProductRepository,LoanProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
