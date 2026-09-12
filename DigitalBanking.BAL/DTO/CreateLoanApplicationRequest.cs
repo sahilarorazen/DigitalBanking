@@ -7,6 +7,12 @@ public class CreateLoanApplicationRequest
     public int CustomerId { get; set; }
 
     [Required]
+    public int ProductId { get; set; }
+    
+    [Required]
+    public int SchemeId { get; set; }
+
+    [Required]
     public decimal LoanAmount { get; set; }
 
     [Required]

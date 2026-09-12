@@ -17,6 +17,8 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
         var entityLoanApplication = new LoanApplication
         {
             CustomerId = request.CustomerId,
+            ProductId = request.ProductId,
+            SchemeId = request.SchemeId,
             LoanAmount = request.LoanAmount,
             Tenure = request.Tenure,
             InterestRate = request.InterestRate,
