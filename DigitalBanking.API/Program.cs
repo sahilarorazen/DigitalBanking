@@ -9,15 +9,69 @@ using Azure.Identity;
 using Azure.Core;
 using Microsoft.Data.SqlClient;
 using DigitalBanking.BAL.Services;
+using Microsoft.Identity.Web;
+using Microsoft.OpenApi;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddOpenApi();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    var scope =
+        $"api://{builder.Configuration["AzureAd:ClientId"]}/access_as_user";
+
+    options.AddSecurityDefinition(
+        "oauth2",
+        new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
+            {
+                AuthorizationCode = new OpenApiOAuthFlow
+                {
+                    AuthorizationUrl = new Uri(
+                        $"https://login.microsoftonline.com/{builder.Configuration["AzureAd:TenantId"]}/oauth2/v2.0/authorize"),
+
+                    TokenUrl = new Uri(
+                        $"https://login.microsoftonline.com/{builder.Configuration["AzureAd:TenantId"]}/oauth2/v2.0/token"),
+
+                    Scopes = new Dictionary<string, string>
+                    {
+                        {
+                            scope,
+                            "Access Digital Banking API"
+                        }
+                    }
+                }
+            }
+        });
+
+    options.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "oauth2"
+                    }
+                },
+                new[] { scope }
+            }
+        });
+});
 builder.Services.AddProblemDetails();
 // builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(
+        builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -34,10 +88,10 @@ builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
 
     // var credential = new AzureCliCredential();
     var credential = new DefaultAzureCredential(
-                new DefaultAzureCredentialOptions
-                {
-                    ManagedIdentityClientId = builder.Configuration["ManagedIdentityClientId"]
-                });
+        new DefaultAzureCredentialOptions
+        {
+            ManagedIdentityClientId = builder.Configuration["ManagedIdentityClientId"]
+        });
 
     var token = credential.GetToken(
         new TokenRequestContext(
@@ -63,21 +117,30 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ILoanApplicationRepository, LoanApplicationRepository>();
 
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 app.UseExceptionHandler();
 app.UseSwagger();
+
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Digital Banking API v1");
+    options.SwaggerEndpoint(
+        "/swagger/v1/swagger.json",
+        "Digital Banking API v1");
+
+    options.OAuthClientId(
+        "0bc8269b-3608-4384-94f9-10be3d4aef05");
+
+    options.OAuthUsePkce();
 });
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.MapGet("/dbtest", async (DigitalBankingDbContext db) =>

@@ -1,8 +1,10 @@
 using DigitalBanking.BAL.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalBanking.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/customers/{customerId:int}/documents")]
 public class CustomerDocumentsController(

@@ -1,10 +1,12 @@
 using DigitalBanking.BAL.DTO;
 using DigitalBanking.BAL.Interface;
 using DigitalBanking.DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalBanking.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/customers")]
 public class CustomersController(ICustomerService customerService) : ControllerBase

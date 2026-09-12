@@ -1,8 +1,10 @@
 using DigitalBanking.BAL.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalBanking.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/loan-products")]
 public class LoanProductsController : ControllerBase
