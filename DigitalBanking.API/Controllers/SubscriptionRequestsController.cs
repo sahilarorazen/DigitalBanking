@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalBanking.API.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class SubscriptionRequestsController : ControllerBase
