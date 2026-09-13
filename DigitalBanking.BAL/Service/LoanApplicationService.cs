@@ -19,6 +19,7 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
             CustomerId = request.CustomerId,
             ProductId = request.ProductId,
             SchemeId = request.SchemeId,
+            CustomerEmail = request.CustomerEmail,
             LoanAmount = request.LoanAmount,
             Tenure = request.Tenure,
             InterestRate = request.InterestRate,
@@ -129,7 +130,8 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
         new LoanAssessmentResultMessage
         {
             LoanApplicationId = loanApplication.Id,
-            CustomerId = loanApplication.CustomerId.ToString(),
+            CustomerId = loanApplication.CustomerId,
+            CustomerEmail = loanApplication.CustomerEmail,
             LoanAmount = loanApplication.LoanAmount,
             RiskScore = riskScore,
             Decision = decision,

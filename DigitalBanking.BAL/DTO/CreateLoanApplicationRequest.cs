@@ -13,6 +13,9 @@ public class CreateLoanApplicationRequest
     public int SchemeId { get; set; }
 
     [Required]
+    public string CustomerEmail { get; set; }
+
+    [Required]
     public decimal LoanAmount { get; set; }
 
     [Required]

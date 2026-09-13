@@ -6,6 +6,7 @@ public class LoanApplication
     public int ProductId { get; set; }
     public int SchemeId { get; set; }
     public int CustomerId { get; set; }
+    public string CustomerEmail { get; set; }
     public decimal LoanAmount { get; set; }
     public int Tenure { get; set; }
     public decimal InterestRate { get; set; }
