@@ -9,15 +9,17 @@ public class SubscriptionRequestService : ISubscriptionRequestService
     private readonly ISubscriptionRequestRepository _repository;
     private readonly IServiceBusPublisherService _publisher;
     private readonly IConfiguration _configuration;
+    private readonly IApimSubscriptionService _apimSubscriptionService;
     
     public SubscriptionRequestService(
         ISubscriptionRequestRepository repository,
         IServiceBusPublisherService publisher,
-        IConfiguration configuration)
+        IConfiguration configuration, IApimSubscriptionService apimSubscriptionService)
     {
         _repository = repository;
         _publisher = publisher;
         _configuration = configuration;
+        _apimSubscriptionService = apimSubscriptionService;
     }
 
     public async Task<int> CreateAsync(
@@ -70,10 +72,14 @@ public class SubscriptionRequestService : ISubscriptionRequestService
                 $"Request {requestId} has already been processed.");
         }
 
+        var apimSubscription = await _apimSubscriptionService
+                                .CreateSubscriptionAsync(request, cancellationToken);
         request.Status = SubscriptionRequestStatus.Approved.ToString();
         request.ApprovedBy = approvedBy;
         request.ApprovedDate = DateTime.UtcNow;
-
+        request.SubscriptionId = apimSubscription.SubscriptionId;
+        request.PrimaryKey = apimSubscription.PrimaryKey;
+        request.SecondaryKey = apimSubscription.SecondaryKey;
         await _repository.UpdateAsync(request, cancellationToken);
     }
 

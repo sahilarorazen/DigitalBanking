@@ -23,4 +23,8 @@ public class SubscriptionRequest
     public string? ApprovedBy { get; set; }
 
     public string? SubscriptionId { get; set; }
+
+    public string? PrimaryKey { get; set; }
+
+    public string? SecondaryKey { get; set; }
 }

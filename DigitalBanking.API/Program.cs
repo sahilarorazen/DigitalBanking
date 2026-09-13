@@ -123,6 +123,7 @@ builder.Services.AddSingleton<ICustomerDocumentService, CustomerDocumentService>
 builder.Services.AddScoped<ILoanProductService,LoanProductService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddScoped<ISubscriptionRequestService,SubscriptionRequestService>();
+builder.Services.AddScoped<IApimSubscriptionService,ApimSubscriptionService>();
 
 builder.Services.AddScoped<ILoanProductRepository,LoanProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
