@@ -2,13 +2,15 @@ using DigitalBanking.BAL.DTO;
 using DigitalBanking.BAL.Interface;
 using DigitalBanking.DAL.Entities;
 using DigitalBanking.DAL.Interface;
+using Microsoft.Extensions.Configuration;
 
 namespace DigitalBanking.BAL.Service;
 
 public class LoanApplicationService(
 ILoanApplicationRepository _loanApplicationRepository, 
 IServiceBusPublisherService _serviceBusPublisher,
-IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplicationService
+IConfiguration _configuration
+) : ILoanApplicationService
 {    
     public async Task<CreateLoanApplicationResponse>
         CreateLoanApplicationAsync(
@@ -41,7 +43,9 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
                 SubmittedDate = DateTime.UtcNow
             };
 
-        await _serviceBusPublisher.PublishAsync(message);
+        await _serviceBusPublisher.PublishAsync(
+            _configuration["ServiceBus:QueueName"], 
+            message, cancellationToken);
 
         return new CreateLoanApplicationResponse
         {
@@ -138,14 +142,15 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
             ProcessedDate = DateTime.UtcNow
         };
 
-        await _assessmentResultPublisher.PublishAsync(
+        await _serviceBusPublisher.PublishAsync(
+            _configuration["ServiceBus:SubscriptionRequestsTopic"],
             resultMessage,
             cancellationToken);           
     }
 
-    public async Task<IEnumerable<LoanApplicationReadDto>> GetAllAsync()
+    public async Task<IEnumerable<LoanApplicationReadDto>> GetAllAsync(CancellationToken cancellationToken)
     {
-        var loans = await _loanApplicationRepository.GetAllAsync();
+        var loans = await _loanApplicationRepository.GetAllAsync(cancellationToken);
 
         return loans.Select(x => new LoanApplicationReadDto
         {
@@ -158,9 +163,9 @@ IAssessmentResultPublisherService _assessmentResultPublisher) : ILoanApplication
         });
     }
 
-    public async Task<LoanApplicationReadDto?> GetByIdAsync(int id)
+    public async Task<LoanApplicationReadDto?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var loan = await _loanApplicationRepository.GetByIdAsync(id, CancellationToken.None);
+        var loan = await _loanApplicationRepository.GetByIdAsync(id, cancellationToken);
 
         if (loan == null)
             return null;

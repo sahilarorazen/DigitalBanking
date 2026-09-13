@@ -19,7 +19,6 @@ builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IAssessmentResultPublisherService, AssessmentResultPublisherService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ILoanApplicationService, LoanApplicationService>();
 builder.Services.AddScoped<IServiceBusPublisherService,ServiceBusPublisherService>();

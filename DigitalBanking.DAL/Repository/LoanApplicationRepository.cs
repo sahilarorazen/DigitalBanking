@@ -17,11 +17,11 @@ public class LoanApplicationRepository(DigitalBankingDbContext _digitalBankingDb
         return loanApplication;
     }
 
-    public async Task<IEnumerable<LoanApplication>> GetAllAsync()
+    public async Task<IEnumerable<LoanApplication>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _digitalBankingDbContext.LoanApplications
             .AsNoTracking()
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<LoanApplication?> GetByIdAsync(int id, CancellationToken cancellationToken)

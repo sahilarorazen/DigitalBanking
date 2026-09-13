@@ -10,6 +10,7 @@ public class DigitalBankingDbContext(DbContextOptions<DigitalBankingDbContext> o
     public DbSet<LoanApplication> LoanApplications => Set<LoanApplication>();
     public DbSet<LoanProduct> LoanProducts => Set<LoanProduct>();
     public DbSet<LoanScheme> LoanSchemes => Set<LoanScheme>();
+    public DbSet<SubscriptionRequest> SubscriptionRequests => Set<SubscriptionRequest>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

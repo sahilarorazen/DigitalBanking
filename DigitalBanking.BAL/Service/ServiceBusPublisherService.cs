@@ -8,41 +8,29 @@ namespace DigitalBanking.BAL.Service;
 
 public class ServiceBusPublisherService : IServiceBusPublisherService
 {
-    private readonly ServiceBusSender _sender;
+    private readonly ServiceBusClient _client;
 
-    public ServiceBusPublisherService(IConfiguration configuration)
+    public ServiceBusPublisherService(ServiceBusClient client)
     {
-        var namespaceName =
-            configuration["ServiceBus:Namespace"];
-
-        var queueName =
-            configuration["ServiceBus:QueueName"];
-
-        var clientId =
-            configuration["ManagedIdentityClientId"];
-
-        var credential =
-            // new AzureCliCredential();
-            new DefaultAzureCredential(
-                new DefaultAzureCredentialOptions
-                {
-                    ManagedIdentityClientId = clientId
-                });
-
-        var client =
-            new ServiceBusClient(
-                namespaceName,
-                credential);
-
-        _sender = client.CreateSender(queueName);
+        _client = client;
     }
 
-    public async Task PublishAsync<T>(T message)
+    public async Task PublishAsync<T>(
+        string entityName,
+        T message,
+        CancellationToken cancellationToken = default)
     {
+        await using var sender =
+            _client.CreateSender(entityName);
+
         var json =
             JsonSerializer.Serialize(message);
 
-        await _sender.SendMessageAsync(
-            new ServiceBusMessage(json));
+        await sender.SendMessageAsync(
+            new ServiceBusMessage(json)
+            {
+                Subject = typeof(T).Name
+            },
+            cancellationToken);
     }
 }

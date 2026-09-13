@@ -13,6 +13,8 @@ using Microsoft.Identity.Web;
 using Microsoft.OpenApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using DigitalBanking.Application.Services;
+using Azure.Messaging.ServiceBus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +81,16 @@ builder.Services.AddStackExchangeRedisCache(options =>
         builder.Configuration["Redis:ConnectionString"];
 });
 
+builder.Services.AddSingleton<ServiceBusClient>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+
+    var connectionString =
+        configuration["ServiceBus:ConnectionString"];
+
+    return new ServiceBusClient(connectionString);
+});
+
 builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
 {
     var connectionString =
@@ -104,18 +116,19 @@ builder.Services.AddDbContext<DigitalBankingDbContext>(options =>
 // builder.Services.AddHealthChecks();
 
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IAssessmentResultPublisherService, AssessmentResultPublisherService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ILoanApplicationService, LoanApplicationService>();
 builder.Services.AddScoped<IServiceBusPublisherService,ServiceBusPublisherService>();
 builder.Services.AddSingleton<ICustomerDocumentService, CustomerDocumentService>();
 builder.Services.AddScoped<ILoanProductService,LoanProductService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<ISubscriptionRequestService,SubscriptionRequestService>();
 
 builder.Services.AddScoped<ILoanProductRepository,LoanProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ILoanApplicationRepository, LoanApplicationRepository>();
+builder.Services.AddScoped<ISubscriptionRequestRepository,SubscriptionRequestRepository>();
 
 builder.Services.AddAuthorization();
 

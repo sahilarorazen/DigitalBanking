@@ -19,19 +19,19 @@ public class LoanApplicationsController(ILoanApplicationService _loanApplication
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
         var result =
-            await _loanApplicationService.GetAllAsync();
+            await _loanApplicationService.GetAllAsync(cancellationToken);
 
         return Ok(result);
     }
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
         var result =
-            await _loanApplicationService.GetByIdAsync(id);
+            await _loanApplicationService.GetByIdAsync(id, cancellationToken);
 
         if (result == null)
             return NotFound();
