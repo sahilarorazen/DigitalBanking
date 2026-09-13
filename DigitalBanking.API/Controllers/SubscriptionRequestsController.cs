@@ -34,7 +34,7 @@ public class SubscriptionRequestsController : ControllerBase
     [HttpPut("{id:int}/approve")]
     public async Task<IActionResult> Approve(
         int id,
-        ApprovalDecisionDto request,
+        [FromBody] ApprovalDecisionDto request,
         CancellationToken cancellationToken)
     {
         await _service.ApproveAsync(
@@ -48,7 +48,7 @@ public class SubscriptionRequestsController : ControllerBase
     [HttpPut("{id:int}/reject")]
     public async Task<IActionResult> Reject(
         int id,
-        ApprovalDecisionDto request,
+        [FromBody] ApprovalDecisionDto request,
         CancellationToken cancellationToken)
     {
         await _service.RejectAsync(
