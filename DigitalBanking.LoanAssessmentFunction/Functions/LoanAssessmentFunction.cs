@@ -11,9 +11,10 @@ public class LoanAssessmentFunction
     private readonly ILoanApplicationService _service;
 
     public LoanAssessmentFunction(
-        ILogger<LoanAssessmentFunction> logger)
+        ILoanApplicationService service,ILogger<LoanAssessmentFunction> logger)
     {
         _logger = logger;
+        _service = service;
     }
 
     [Function(nameof(LoanAssessmentFunction))]
