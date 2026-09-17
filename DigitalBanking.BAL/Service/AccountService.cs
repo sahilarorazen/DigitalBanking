@@ -98,10 +98,10 @@ public class AccountService(
     private async Task EnsureApprovedCustomerAsync(int customerId, CancellationToken cancellationToken)
     {
         var customer = await EnsureCustomerExistsAsync(customerId, cancellationToken);
-        // if (!string.Equals(customer.Status, "Approved", StringComparison.OrdinalIgnoreCase))
-        // {
-        //     throw new ArgumentException("Only approved customers can create accounts.", nameof(customerId));
-        // }
+        if (!string.Equals(customer.Status, "Approved", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new ArgumentException("Only approved customers can create accounts.", nameof(customerId));
+        }
     }
 
     private async Task<Customer> EnsureCustomerExistsAsync(int customerId, CancellationToken cancellationToken)

@@ -10,12 +10,28 @@ public class LoanApplicationRepository(DigitalBankingDbContext _digitalBankingDb
     public async Task<LoanApplication> CreateAsync(
         LoanApplication loanApplication, CancellationToken cancellationToken)
     {
-        _digitalBankingDbContext.LoanApplications.Add(loanApplication);
+        try
+        {
+            _digitalBankingDbContext.LoanApplications.Update(loanApplication);
 
-        await _digitalBankingDbContext.SaveChangesAsync(cancellationToken);
+            await _digitalBankingDbContext.SaveChangesAsync(cancellationToken);
 
-        return loanApplication;
+            return loanApplication;
+        } 
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.ToString()}");
+            Console.WriteLine($"Message: {ex.Message.ToString()}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner Exception: {ex.InnerException.ToString()}");
+                Console.WriteLine($"Inner Exception Message: {ex.InnerException.Message.ToString()}");
+            }
+            throw;
+        }    
+        
     }
+    
 
     public async Task<IEnumerable<LoanApplication>> GetAllAsync(CancellationToken cancellationToken)
     {

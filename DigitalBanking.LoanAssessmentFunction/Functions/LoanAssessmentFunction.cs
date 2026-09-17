@@ -11,7 +11,9 @@ public class LoanAssessmentFunction
     private readonly ILoanApplicationService _service;
 
     public LoanAssessmentFunction(
-        ILoanApplicationService service,ILogger<LoanAssessmentFunction> logger)
+        ILoanApplicationService service,
+        ILogger<LoanAssessmentFunction> logger
+        )
     {
         _logger = logger;
         _service = service;
@@ -24,6 +26,8 @@ public class LoanAssessmentFunction
             Connection = "ServiceBusConnection")]
         string message)
     {
+         _logger.LogInformation("LoanAssessmentFunction Triggered");
+        
         var assessmentMessage = System.Text.Json.JsonSerializer.Deserialize<LoanAssessmentMessage>(message);
         
         if (assessmentMessage == null)
